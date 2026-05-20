@@ -1,0 +1,5 @@
+paho-mqtt
+adafruit-circuitpython-sht31d
+gpiozero
+pyserial
+pynmea2
