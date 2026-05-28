@@ -1,8 +1,8 @@
 import time
 import config
 
-# استدعاء الدوال من sensor.py + دالة التنظيف cleanup_sensors
-from sensor import get_environment_data, get_gas_status, get_location, cleanup_sensors
+# استدعاء الدوال المعدلة من sensor.py
+from sensor import read_sht31, read_gas_sensors, read_gps, read_door_status
 from mqtt import MQTTHandler
 
 def main():
@@ -14,10 +14,11 @@ def main():
 
     try:
         while True:
-            # ========= 1. قراءة الحساسات =========
-            temp, hum = get_environment_data()
-            mq135_alert, mq9_alert = get_gas_status()
-            lat, lng = get_location()
+            # ========= 1. قراءة الحساسات (تم التعديل) =========
+            temp, hum = read_sht31()
+            mq135_alert, mq9_alert = read_gas_sensors()
+            door_status = read_door_status()  # تمت إضافة قراءة الباب
+            lat, lng = read_gps()
 
             # ========= 2. التعديل المطلوب: حماية لو الحساس رجّع None =========
             # تحويل القيم الفارغة للحرارة والرطوبة إلى -1
@@ -36,6 +37,7 @@ def main():
                 "humidity": hum,
                 "mq135_gas_alert": mq135_alert,
                 "mq9_gas_alert": mq9_alert,
+                "door_status": door_status,  # تمت إضافة حالة الباب هنا
                 "latitude": lat,
                 "longitude": lng,
                 "timestamp": int(time.time())
@@ -62,7 +64,7 @@ def main():
         # ========= 7. التعديل المطلوب: الإغلاق الصحيح =========
         print("Shutting down connections...")
         mqtt_handler.stop()
-        cleanup_sensors()
+        # تم حذف cleanup_sensors() لأن الدالة غير موجودة الآن
         print("System stopped safely.")
 
 if __name__ == "__main__":
