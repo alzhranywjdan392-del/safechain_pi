@@ -1,27 +1,27 @@
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt#مكتبه هي تفتح قنوات الاتصال وترسل الرسائل 
 import json
 import time
 import config  # استيراد الإعدادات
 
 class MQTTHandler:
     def __init__(self):
-        self.broker = config.MQTT_BROKER
+        self.broker = config.MQTT_BROKER#ننشا بروكر 
         self.port = config.MQTT_PORT
-        self.client_id = config.MQTT_CLIENT_ID
-        self.topic = config.MQTT_TOPIC
+        self.client_id = config.MQTT_CLIENT_ID#رقم الشاحنه 
+        self.topic = config.MQTT_TOPIC# الموضوع 
         
         # إنشاء العميل
         self.client = mqtt.Client(client_id=self.client_id)
         self.client.on_connect = self._on_connect
 
     def _on_connect(self, client, userdata, flags, rc):
-        if rc == 0:
+        if rc == 0:#0 يعني الاتصال ناجحغير كذا فاشل 
             print(f"[MQTT] Connected to {self.broker}")
         else:
             print(f"[MQTT] Connection failed with code {rc}")
 
     def start(self):
-        """بدء الاتصال وحلقة الشبكة الخلفية"""
+        """بدء الاتصال """
         try:
             self.client.connect(self.broker, self.port, 60)
             self.client.loop_start()
@@ -46,6 +46,6 @@ class MQTTHandler:
             print(f"[MQTT] Publishing Error: {e}")
 
     def stop(self):
-        """إيقاف نظيف"""
+        """إيقاف """
         self.client.loop_stop()
         self.client.disconnect()
