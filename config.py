@@ -2,7 +2,7 @@
 TRUCK_ID = "TRUCK_001"
 
 # إعدادات MQTT
-MQTT_BROKER = "broker.hivemq.com"  # ضع هنا IP سيرفرك الخاص إذا وجد
+MQTT_BROKER = "broker.hivemq.com" د
 MQTT_PORT = 1883
 MQTT_TOPIC = f"safechain/{TRUCK_ID}/sensors"
 MQTT_CLIENT_ID = f"{TRUCK_ID}_Client"
